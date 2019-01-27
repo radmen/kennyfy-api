@@ -1,7 +1,16 @@
 (ns kennyfy-api.core
   (:require [org.httpkit.server :refer [run-server]]
-            [ring.middleware.reload :as reload])
+            [ring.middleware.reload :as reload]
+            [clojure.tools.cli :refer [parse-opts]])
   (:gen-class))
+
+(def cli-options
+  [["-d" nil "Run in dev mode"
+    :id :dev?]
+   ["-p" "--port PORT" "Port number"
+    :default 8080
+    :parse-fn #(Integer/parseInt %)
+    :validate [#(< 0 % 0x10000) "Must be a number between 0 and 65536"]]])
 
 (defn app
   [req]
@@ -10,16 +19,20 @@
    :body "Master Kenobi!"})
 
 (defn is-dev?
-  [& args]
-  (do
-    (println (first args))
-    true)) ;; @TODO do something
+  [{:keys [options]}]
+  (:dev? options))
+
+(defn create-handler
+  [{:keys [dev?]}]
+  (if dev?
+    (reload/wrap-reload #'app)
+    #'app))
 
 (defn -main
   [& args]
-    (let [handler (if (is-dev? args)
-                    (reload/wrap-reload #'app)
-                    #'app)]
-      (do         
-        (run-server handler {:port 8080})
-        (println "Server running on port 8080"))))
+    (let [options (parse-opts args cli-options)
+          handler (create-handler {:dev? (is-dev? options)})
+          port    (->> options :options :port)]
+      (do
+        (run-server handler {:port port})
+        (println "Server running on port" port))))
