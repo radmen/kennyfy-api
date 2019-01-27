@@ -1,7 +1,8 @@
 (ns kennyfy-api.core
   (:require [org.httpkit.server :refer [run-server]]
             [ring.middleware.reload :as reload]
-            [clojure.tools.cli :refer [parse-opts]])
+            [clojure.tools.cli :refer [parse-opts]]
+            [ring.middleware.json :refer [wrap-json-params]])
   (:gen-class))
 
 (def cli-options
@@ -24,9 +25,11 @@
 
 (defn create-handler
   [{:keys [dev?]}]
-  (if dev?
-    (reload/wrap-reload #'app)
-    #'app))
+  (let [base-handler (if dev?
+                       (reload/wrap-reload #'app)
+                       #'app)]
+    (-> base-handler
+        wrap-json-params)))
 
 (defn -main
   [& args]

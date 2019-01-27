@@ -7,7 +7,8 @@
                  [http-kit "2.3.0"]
                  [ring/ring-devel "1.7.0"]
                  [ring/ring-core "1.7.0"]
-                 [org.clojure/tools.cli "0.4.1"]]
+                 [org.clojure/tools.cli "0.4.1"]
+                 [ring/ring-json "0.4.0"]]
   :main ^:skip-aot kennyfy-api.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
