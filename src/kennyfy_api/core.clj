@@ -2,7 +2,8 @@
   (:require [org.httpkit.server :refer [run-server]]
             [ring.middleware.reload :as reload]
             [clojure.tools.cli :refer [parse-opts]]
-            [ring.middleware.json :refer [wrap-json-params]])
+            [ring.middleware.json :refer [wrap-json-params]]
+            [clojure.data.json :as json])
   (:gen-class))
 
 (def cli-options
@@ -18,6 +19,12 @@
   {:status 200
    :headers {"Content-type" "text/html"}
    :body "Master Kenobi!"})
+
+(defn json-response
+  [data & [status]]
+  {:status (or status 200)
+   :headers {"Content-type" "application/json"}
+   :body (json/write-str data)})
 
 (defn is-dev?
   [{:keys [options]}]
