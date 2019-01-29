@@ -8,8 +8,11 @@
                  [ring/ring-devel "1.7.0"]
                  [ring/ring-core "1.7.0"]
                  [org.clojure/tools.cli "0.4.1"]
+                 [compojure "1.6.1"]
                  [ring/ring-json "0.4.0"]
-                 [org.clojure/data.json "0.2.6"]]
+                 [org.clojure/data.json "0.2.6"]
+                 [com.github.radmen/clojure-kennyfy "0.1.2"]]
+  :repositories [["jitpack" "https://jitpack.io"]]
   :main ^:skip-aot kennyfy-api.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})

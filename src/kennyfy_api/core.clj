@@ -2,8 +2,10 @@
   (:require [org.httpkit.server :refer [run-server]]
             [ring.middleware.reload :as reload]
             [clojure.tools.cli :refer [parse-opts]]
+            [compojure.core :refer [defroutes POST]]
             [ring.middleware.json :refer [wrap-json-params]]
-            [clojure.data.json :as json])
+            [clojure.data.json :as json]
+            [radmen.kennyfy :refer [kenny-speak kenny-translate]])
   (:gen-class))
 
 (def cli-options
@@ -14,17 +16,17 @@
     :parse-fn #(Integer/parseInt %)
     :validate [#(< 0 % 0x10000) "Must be a number between 0 and 65536"]]])
 
-(defn app
-  [req]
-  {:status 200
-   :headers {"Content-type" "text/html"}
-   :body "Master Kenobi!"})
-
 (defn json-response
   [data & [status]]
   {:status (or status 200)
    :headers {"Content-type" "application/json"}
    :body (json/write-str data)})
+
+(defroutes all-routes
+  (POST "/speak" [text]
+    (json-response {:text (kenny-speak text)}))
+  (POST "/translate" [text]
+    (json-response {:text (kenny-translate text)})))
 
 (defn is-dev?
   [{:keys [options]}]
@@ -33,8 +35,8 @@
 (defn create-handler
   [{:keys [dev?]}]
   (let [base-handler (if dev?
-                       (reload/wrap-reload #'app)
-                       #'app)]
+                       (reload/wrap-reload #'all-routes)
+                       #'all-routes)]
     (-> base-handler
         wrap-json-params)))
 
