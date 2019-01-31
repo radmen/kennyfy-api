@@ -9,7 +9,7 @@ RUN wget -O /usr/bin/lein https://raw.githubusercontent.com/technomancy/leininge
 COPY . /usr/src/app/
 
 RUN lein uberjar \
-	&& mv target/uberjar/kennyfy-api-*-SNAPSHOT-standalone.jar target/uberjar/kennyfy-api.jar
+	&& mv target/uberjar/kennyfy-api-*-standalone.jar target/uberjar/kennyfy-api.jar
 
 FROM openjdk:8-alpine
 WORKDIR /usr/src/app
