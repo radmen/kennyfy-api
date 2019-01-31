@@ -1,6 +1,7 @@
 (ns kennyfy-api.core
   (:require [clojure.tools.cli :refer [parse-opts]]
             [compojure.core :refer [defroutes POST]]
+            [compojure.route :as route]
             [kennyfy-api.server :refer :all]
             [radmen.kennyfy :refer [kenny-speak kenny-translate]])
   (:gen-class))
@@ -21,7 +22,9 @@
   (POST "/speak" [text]
     (json-response {:text (kenny-speak text)}))
   (POST "/translate" [text]
-    (json-response {:text (kenny-translate text)})))
+    (json-response {:text (kenny-translate text)}))
+  (route/not-found
+    (json-response {"Hello there!" "Master Kenobi!"})))
 
 (defn -main
   [& args]
