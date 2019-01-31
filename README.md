@@ -22,6 +22,12 @@ or, using `lein`:
 lein run
 ```
 
+or, using `docker`:
+
+```
+docker run --rm -p 8080:8080 radmen/kennyfy-api
+```
+
 ## Options
 
 * `-p | --port` port number (default: `8080`)
