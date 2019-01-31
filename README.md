@@ -1,36 +1,51 @@
 # kennyfy-api
 
-FIXME: description
+Simple API which translates given text to kennyspeak.
+
+Done for learning purpose.
 
 ## Installation
 
-Download from http://example.com/FIXME.
+```
+lein uberjar
+```
 
 ## Usage
 
-FIXME: explanation
+```
+java -jar kennyfy-api-0.1.0.jar
+```
 
-    $ java -jar kennyfy-api-0.1.0-standalone.jar [args]
+or, using `lein`:
+
+```
+lein run
+```
 
 ## Options
 
-FIXME: listing of options this app accepts.
+* `-p | --port` port number (default: `8080`)
+* `-d` development mode - will reload handlers on changes
 
-## Examples
+## API endpoints
 
-...
+`POST /speak` - converts text to kennyspeak
 
-### Bugs
+```
+$ curl -X post http://localhost:8080/speak -H "Content-type: application/json" -d '{"text": "Foo"}'
+{"text":"Mpfppfppf"}
+```
 
-...
+`POST /translate` - decodes kennyspeak
 
-### Any Other Sections
-### That You Think
-### Might be Useful
+```
+$ curl -X post http://localhost:8080/translate -H "Content-type: application/json" -d '{"text": "Mpfppfppf"}'
+{"text":"Foo"}
+```
 
 ## License
 
-Copyright © 2019 FIXME
+Copyright © 2019 Radoslaw Mejer
 
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License 2.0 which is available at
